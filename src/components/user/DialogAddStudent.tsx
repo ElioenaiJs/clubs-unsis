@@ -11,6 +11,7 @@ import {
   Select,
   SelectChangeEvent,
   MenuItem,
+  FormControl,
 } from "@mui/material";
 import React from "react";
 
@@ -26,31 +27,53 @@ export function DialogAddStudent({ open, onClose }: DialogAddStudentProps) {
     setAge(event.target.value as string);
   };
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} slotProps={{ paper: { sx: { width: "600px", maxWidth: "none", }}}}>
       <DialogTitle>Agregar nuevo alumno</DialogTitle>
       <DialogContent>
         <Box
           component="form"
-          sx={{ "& > :not(style)": { m: 1, width: "25ch" } }}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            width: "100%",
+          }}
           noValidate
           autoComplete="off"
         >
-          <TextField id="standard-basic" label="Matrícula" variant="standard" />
-          <TextField id="standard-basic" label="Nombre" variant="standard" />
-          <TextField id="standard-basic" label="Correo" variant="standard" />
-          <InputLabel id="demo-simple-select-label">Club</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={age}
-            label="Age"
-            onChange={handleChange}
-          >
-            <MenuItem value={'club_ajedrez'}>Ajedrez</MenuItem>
-            <MenuItem value={'club_danza'}>Danza</MenuItem>
-            <MenuItem value={'club_taekwondo'}>Taekwondo</MenuItem>
-          </Select>
-        </Box>{" "}
+          <TextField
+            id="matricula"
+            label="Matrícula"
+            variant="standard"
+            fullWidth
+          />
+          <TextField
+            id="nombre"
+            label="Nombre"
+            variant="standard"
+            fullWidth
+          />
+          <TextField
+            id="correo"
+            label="Correo"
+            variant="standard"
+            fullWidth
+          />
+          <FormControl fullWidth variant="standard">
+            <InputLabel id="club-select-label">Club</InputLabel>
+            <Select
+              labelId="club-select-label"
+              id="club-select"
+              value={age}
+              label="Club"
+              onChange={handleChange}
+            >
+              <MenuItem value={"club_ajedrez"}>Ajedrez</MenuItem>
+              <MenuItem value={"club_danza"}>Danza</MenuItem>
+              <MenuItem value={"club_taekwondo"}>Taekwondo</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancelar</Button>

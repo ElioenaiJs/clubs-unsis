@@ -69,8 +69,9 @@ export function StudentsPage() {
       <h1 className="text-2xl font-bold mb-4">Alumnos</h1>
       <div className="flex justify-end">
         <Button variant="contained" onClick={() => setOpen(true)}>+ Agregar alumno</Button>
-      </div>
-      <DialogAddStudent open={open} onClose={() => setOpen(false)} />
+      </div>  
+
+      <DialogAddStudent open={open} onClose={() => setOpen(false)}/>
       <br />
       <div className="grid gap-4">
         {allStudents.length > 0 ? (
