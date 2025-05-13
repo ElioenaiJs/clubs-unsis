@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import { useNavigate } from "react-router-dom";
 
 interface Student {
   name: string;
@@ -17,6 +18,7 @@ export function ClubsPage() {
   const [clubsData, setClubsData] = useState<ClubData[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [hasFetched, setHasFetched] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!hasFetched) {
@@ -63,7 +65,7 @@ export function ClubsPage() {
       
       <div className="grid gap-6 md:grid-cols-3 cursor-pointer ">
         {clubsData.map((club) => (
-            <div key={club.nombre} className="border border-gray-100 p-4 shadow transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
+            <div key={club.nombre} className="border border-gray-100 p-4 shadow transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg" onClick={() => navigate(`/clubs-unsis/club/${club.nombre}`)}>
             <h2 className="text-xl font-semibold mb-3">{club.nombre}</h2>
             </div>
         ))}
