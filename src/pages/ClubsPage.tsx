@@ -16,7 +16,7 @@ export function ClubsPage() {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Clubs Disponibles</h1>
+      <h1 className="text-2xl font-bold mb-4">Clubs</h1>
 
       <div className="grid gap-6 md:grid-cols-3">
         {clubsData.map((club) => (
