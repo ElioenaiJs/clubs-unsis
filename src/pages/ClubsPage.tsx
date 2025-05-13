@@ -61,13 +61,13 @@ export function ClubsPage() {
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Clubs</h1>
       
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-3 cursor-pointer ">
         {clubsData.map((club) => (
-          <div key={club.nombre} className="border rounded-lg p-4 shadow">
+            <div key={club.nombre} className="border border-gray-100 p-4 shadow transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
             <h2 className="text-xl font-semibold mb-3">{club.nombre}</h2>
-          </div>
+            </div>
         ))}
       </div>
-    </div>
+</div>
   );
 }
