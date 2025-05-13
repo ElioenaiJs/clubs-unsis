@@ -21,11 +21,11 @@ export function MembersPage() {
         // Construye el nombre de la colección basado en el clubId
         const collectionName = `club_${clubId}`;
         const snapshot = await getDocs(collection(db, collectionName));
-        
-        const studentsData = snapshot.docs.map(doc => ({
+
+        const studentsData = snapshot.docs.map((doc) => ({
           name: doc.data().nombre_alumno,
           id: doc.data().numero_alumno,
-          email: doc.data().correo
+          email: doc.data().correo,
         }));
 
         setStudents(studentsData);
@@ -45,16 +45,46 @@ export function MembersPage() {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Miembros del Club</h1>
-      
-      <div className="grid gap-4">
+      <h1 className="text-2xl font-bold mb-4">{clubId?.toUpperCase()}</h1>
+
+      <div className="relative overflow-x-auto">
         {students.length > 0 ? (
           students.map((student) => (
-            <div key={student.id} className="border p-3 rounded-lg">
-              <h3 className="font-medium">{student.name}</h3>
-              <p className="text-sm text-gray-600">ID: {student.id}</p>
-              <p className="text-sm text-gray-600">Email: {student.email}</p>
-            </div>
+            <table className="w-full text-sm text-left rtl:text-right">
+              <thead className="text-xs uppercase">
+                <tr>
+                  <th scope="col" className="px-6 py-3">
+                    Nombre
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Matricula
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Correo
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Eliminar
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Actualizar
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="bg-white">
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium whitespace-nowrap"
+                  >
+                    {student.name}
+                  </th>
+                  <td className="px-6 py-4">{student.id}</td>
+                  <td className="px-6 py-4">{student.email}</td>
+                  <td className="px-6 py-4"></td>
+                  <td className="px-6 py-4"></td>
+                </tr>
+              </tbody>
+            </table>
           ))
         ) : (
           <p>No hay miembros registrados en este club</p>
