@@ -1,6 +1,6 @@
 import { Sidebar } from "./components/sidebar";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { ClubsPage, MembersPage } from "./pages";
+import { ClubsPage, MembersPage, StudentsPage } from "./pages";
 import "./App.css";
 
 function App() {
@@ -12,6 +12,7 @@ function App() {
         <Route path="/" element={<Navigate to="/clubs-unsis/clubs" replace />} />
         <Route path="/clubs-unsis/clubs" element={<ClubsPage />} />
         <Route path="/clubs-unsis/club/:clubId" element={<MembersPage />} />
+        <Route path="/clubs-unsis/add-student" element={<StudentsPage />} />
         </Routes>
       </div>
     </div>

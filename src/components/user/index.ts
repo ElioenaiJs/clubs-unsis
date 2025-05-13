@@ -1,0 +1,1 @@
+export { DialogAddStudent } from './DialogAddStudent';

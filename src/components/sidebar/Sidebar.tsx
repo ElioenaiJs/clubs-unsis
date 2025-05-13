@@ -8,6 +8,12 @@ const menuItems = [
     title: "Clubs",
     subTitle: "Panel principal de clubes",
   },
+  {
+    path: "/clubs-unsis/add-student",
+    icon: <IoPeopleSharp size={24} />,
+    title: "Alumnos",
+    subTitle: "Registrar alumno",
+  },
 ];
 
 export const Sidebar = () => {
