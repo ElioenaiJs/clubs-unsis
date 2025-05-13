@@ -11,7 +11,7 @@ function App() {
         <Routes>
         <Route path="/" element={<Navigate to="/clubs-unsis/clubs" replace />} />
         <Route path="/clubs-unsis/clubs" element={<ClubsPage />} />
-        <Route path="/clubs-unsis/club/:name" element={<MembersPage />} />
+        <Route path="/clubs-unsis/club/:clubId" element={<MembersPage />} />
         </Routes>
       </div>
     </div>
