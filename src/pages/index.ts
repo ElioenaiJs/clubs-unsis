@@ -1,2 +1,2 @@
 export { ClubsPage } from './ClubsPage';
-export { StudentPage } from './StudentPage'
+export { MembersPage } from './MembersPage'
