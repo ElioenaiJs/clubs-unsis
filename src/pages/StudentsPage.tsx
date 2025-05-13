@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import Button from '@mui/material/Button';
+import { DialogAddStudent } from "../components/user";
 
 interface Student {
   club: string;
@@ -14,6 +15,7 @@ export function StudentsPage() {
   const [allStudents, setAllStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
 
   // Lista estática de colecciones de clubes
   const clubCollections = [
@@ -66,8 +68,9 @@ export function StudentsPage() {
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Alumnos</h1>
       <div className="flex justify-end">
-        <Button variant="contained">+ Agregar alumno</Button>
+        <Button variant="contained" onClick={() => setOpen(true)}>+ Agregar alumno</Button>
       </div>
+      <DialogAddStudent open={open} onClose={() => setOpen(false)} />
       <br />
       <div className="grid gap-4">
         {allStudents.length > 0 ? (

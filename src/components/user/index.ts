@@ -1,1 +1,1 @@
-export { DialogAddStudent } from './DialogAddStudent';
+export {  DialogAddStudent } from './DialogAddStudent';
