@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../lib/firebase";
+import Button from '@mui/material/Button';
 
 interface Student {
   club: string;
@@ -65,12 +66,7 @@ export function StudentsPage() {
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Alumnos</h1>
       <div className="flex justify-end">
-        <button
-          type="button"
-          className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700"
-        >
-          + Agregar alumno
-        </button>
+        <Button variant="contained">+ Agregar alumno</Button>
       </div>
       <br />
       <div className="grid gap-4">
