@@ -1,12 +1,19 @@
 import { IoLogoReact, IoPeopleSharp } from "react-icons/io5";
+import { HiUser } from "react-icons/hi";
 import { SidebarMenuItem } from "./SidebarMenuItem";
 
 const menuItems = [
   {
-    path: "/dashboard/main",
+    path: "/clubs-unsis/clubs",
     icon: <IoPeopleSharp size={24} />,
     title: "Clubs",
     subTitle: "Panel principal de clubes",
+  },
+  {
+    path: "/clubs-unsis/students",
+    icon: <HiUser size={24} />,
+    title: "Alumnos",
+    subTitle: "Agregar alumno",
   },
 ];
 

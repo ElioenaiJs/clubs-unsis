@@ -1,7 +1,7 @@
-import { Sidebar } from './components/sidebar';
-import { Routes, Route } from 'react-router-dom';
-import { ClubsPage } from './pages';
-import './App.css';
+import { Sidebar } from "./components/sidebar";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { ClubsPage, StudentPage } from "./pages";
+import "./App.css";
 
 function App() {
   return (
@@ -9,7 +9,9 @@ function App() {
       <Sidebar />
       <div className="main-content">
         <Routes>
-          <Route path="/clubs/main" element={<ClubsPage />} />
+        <Route path="/" element={<Navigate to="/clubs-unsis/clubs" replace />} />
+        <Route path="/clubs-unsis/clubs" element={<ClubsPage />} />
+        <Route path="/clubs-unsis/students" element={<StudentPage />} />
         </Routes>
       </div>
     </div>

@@ -1,5 +1,5 @@
 export function ClubsPage() {
   return (
-    <div></div>
+    <div>Clubs</div>
   );
 }
