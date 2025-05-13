@@ -45,7 +45,17 @@ export function MembersPage() {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">{clubId?.toUpperCase()}</h1>
+      <h1 className="text-2xl font-bold mb-4">
+        {clubId ? clubId.charAt(0).toUpperCase() + clubId.slice(1).toLowerCase() : ''}
+      </h1>
+      <div className="flex justify-end">
+        <button
+          type="button"
+          className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700"
+        >
+          + Agregar alumno
+        </button>
+      </div>
 
       <div className="relative overflow-x-auto">
         {students.length > 0 ? (
@@ -63,10 +73,10 @@ export function MembersPage() {
                     Correo
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Eliminar
+                    
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Actualizar
+                    
                   </th>
                 </tr>
               </thead>
