@@ -59,9 +59,6 @@ export function DialogAddStudent({ open, onClose }: DialogAddStudentProps) {
             // Agregar el documento a la colección
             await addDoc(clubCollection, alumnoData);
 
-            // Mostrar mensaje de éxito
-            alert("Alumno agregado correctamente");
-
             // Cerrar el diálogo y limpiar los campos
             handleClose();
         } catch (error) {
