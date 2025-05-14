@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../lib/firebase";
+import { Button } from "@mui/material";
+import { DialogAddStudent } from "../components/user";
 
 interface Student {
   name: string;
@@ -14,6 +16,7 @@ export function MembersPage() {
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -49,14 +52,10 @@ export function MembersPage() {
         {clubId ? clubId.charAt(0).toUpperCase() + clubId.slice(1).toLowerCase() : ''}
       </h1>
       <div className="flex justify-end">
-        <button
-          type="button"
-          className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700"
-        >
-          + Agregar alumno
-        </button>
+        <Button variant="contained" onClick={() => setOpen(true)}>+ Agregar alumno</Button>
       </div>
 
+      <DialogAddStudent open={open} onClose={() => setOpen(false)}/>
       <div className="relative overflow-x-auto">
         {students.length > 0 ? (
           students.map((student) => (
