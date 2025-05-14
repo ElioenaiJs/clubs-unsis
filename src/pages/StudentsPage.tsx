@@ -9,6 +9,15 @@ import {
   Snackbar,
   Alert,
   TextField,
+  TableContainer,
+  Typography,
+  Table,
+  Paper,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Chip,
 } from "@mui/material";
 
 interface Student {
@@ -160,49 +169,53 @@ export function StudentsPage() {
       </Snackbar>
 
       <br />
-      <div className="grid gap-4">
+      <Box sx={{ mt: 4 }}>
         {filteredStudents.length > 0 ? (
-          <table className="w-full text-sm text-left rtl:text-right">
-            <thead className="text-xs uppercase">
-              <tr>
-                <th scope="col" className="px-6 py-3">
-                  Nombre
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Matricula
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Correo
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Club
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredStudents.map((student) => (
-                <tr key={`${student.id}-${student.club}`} className="bg-white">
-                  <th
-                    scope="row"
-                    className="px-6 py-4 font-medium whitespace-nowrap"
-                  >
-                    {student.name}
-                  </th>
-                  <td className="px-6 py-4">{student.id}</td>
-                  <td className="px-6 py-4">{student.email}</td>
-                  <td className="px-6 py-4">
-                    <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
-                      {student.club}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="student table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    <strong>Nombre</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Matrícula</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Correo</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Club</strong>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filteredStudents.map((student) => (
+                  <TableRow key={`${student.id}-${student.club}`}>
+                    <TableCell component="th" scope="row">
+                      {student.name}
+                    </TableCell>
+                    <TableCell>{student.id}</TableCell>
+                    <TableCell>{student.email}</TableCell>
+                    <TableCell>
+                      <Chip
+                        label={student.club}
+                        color="primary"
+                        size="small"
+                        sx={{ bgcolor: "blue.100", color: "blue.800" }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         ) : (
-          <p className="text-gray-500">No se encontraron resultados</p>
+          <Typography variant="body2" color="text.secondary">
+            No se encontraron resultados
+          </Typography>
         )}
-      </div>
+      </Box>
     </div>
   );
 }

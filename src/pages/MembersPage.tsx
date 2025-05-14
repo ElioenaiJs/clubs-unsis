@@ -2,7 +2,22 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../lib/firebase";
-import { Alert, Box, Button, CircularProgress, Snackbar, TextField } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  Paper,
+  Snackbar,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { DialogAddStudent } from "../components/user";
 
 interface Student {
@@ -51,10 +66,11 @@ export function MembersPage() {
 
   useEffect(() => {
     if (searchTerm) {
-      const filtered = students.filter((student) =>
-        student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        student.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        student.email.toLowerCase().includes(searchTerm.toLowerCase())
+      const filtered = students.filter(
+        (student) =>
+          student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          student.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          student.email.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredStudents(filtered);
     } else {
@@ -122,58 +138,64 @@ export function MembersPage() {
         open={snackbarOpen}
         autoHideDuration={6000}
         onClose={() => setSnackbarOpen(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}>
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
         <Alert
           onClose={() => setSnackbarOpen(false)}
           severity="success"
-          variant="filled">
+          variant="filled"
+        >
           Alumno agregado correctamente
         </Alert>
       </Snackbar>
 
-      <div className="relative overflow-x-auto">
-        <table className="w-full text-sm text-left rtl:text-right">
-          <thead className="text-xs uppercase">
-            <tr>
-              <th scope="col" className="px-6 py-3">
-                Nombre
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Matricula
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Correo
-              </th>
-              <th scope="col" className="px-6 py-3"></th>
-              <th scope="col" className="px-6 py-3"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredStudents.length > 0 ? (
-              filteredStudents.map((student) => (
-                <tr className="bg-white" key={student.id}>
-                  <th
-                    scope="row"
-                    className="px-6 py-4 font-medium whitespace-nowrap"
-                  >
-                    {student.name}
-                  </th>
-                  <td className="px-6 py-4">{student.id}</td>
-                  <td className="px-6 py-4">{student.email}</td>
-                  <td className="px-6 py-4"></td>
-                  <td className="px-6 py-4"></td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={5} className="px-6 py-4 text-center">
-                  No hay registrados en este club
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+      <Box sx={{ overflowX: "auto" }}>
+        <TableContainer component={Paper}>
+          <Table
+            sx={{ minWidth: 650 }}
+            aria-label="students table with actions"
+          >
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  <strong>Nombre</strong>
+                </TableCell>
+                <TableCell>
+                  <strong>Matrícula</strong>
+                </TableCell>
+                <TableCell>
+                  <strong>Correo</strong>
+                </TableCell>
+                <TableCell />
+                <TableCell />
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredStudents.length > 0 ? (
+                filteredStudents.map((student) => (
+                  <TableRow key={student.id}>
+                    <TableCell component="th" scope="row">
+                      {student.name}
+                    </TableCell>
+                    <TableCell>{student.id}</TableCell>
+                    <TableCell>{student.email}</TableCell>
+                    <TableCell>{/* Espacio para acción futura */}</TableCell>
+                    <TableCell>{/* Espacio para acción futura */}</TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={5} align="center">
+                    <Typography variant="body2" color="text.secondary">
+                      No hay registrados en este club
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
     </div>
   );
 }
