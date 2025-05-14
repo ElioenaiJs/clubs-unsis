@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../lib/firebase";
-import Button from '@mui/material/Button';
+import Button from "@mui/material/Button";
 import { DialogAddStudent } from "../components/user";
-import { Box, CircularProgress, Snackbar, Alert } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Snackbar,
+  Alert,
+  TextField,
+} from "@mui/material";
 
 interface Student {
   club: string;
@@ -14,17 +20,15 @@ interface Student {
 
 export function StudentsPage() {
   const [allStudents, setAllStudents] = useState<Student[]>([]);
+  const [filteredStudents, setFilteredStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const clubCollections = [
-    "club_ajedrez",
-    "club_danza",
-    "club_taekwondo",
-  ];
+  const clubCollections = ["club_ajedrez", "club_danza", "club_taekwondo"];
 
   useEffect(() => {
     const fetchAllStudents = async () => {
@@ -52,6 +56,7 @@ export function StudentsPage() {
         });
 
         setAllStudents(students);
+        setFilteredStudents(students); // Inicialmente mostramos todos los estudiantes
       } catch (err) {
         console.error("Error fetching all students:", err);
         setError("Error al cargar todos los miembros");
@@ -63,8 +68,27 @@ export function StudentsPage() {
     fetchAllStudents();
   }, [refreshTrigger]);
 
+  // Filtrar los estudiantes según el término de búsqueda
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const term = event.target.value.toLowerCase();
+    setSearchTerm(term);
+
+    if (term === "") {
+      setFilteredStudents(allStudents); // Si no hay búsqueda, mostrar todos los estudiantes
+    } else {
+      const filtered = allStudents.filter(
+        (student) =>
+          student.name.toLowerCase().includes(term) ||
+          student.id.toLowerCase().includes(term) ||
+          student.email.toLowerCase().includes(term) ||
+          student.club.toLowerCase().includes(term)
+      );
+      setFilteredStudents(filtered);
+    }
+  };
+
   const handleAddSuccess = () => {
-    setRefreshTrigger(prev => prev + 1); // Forzar recarga de datos
+    setRefreshTrigger((prev) => prev + 1); // Forzar recarga de datos
     setSnackbarOpen(true); // Mostrar notificación
   };
 
@@ -72,52 +96,72 @@ export function StudentsPage() {
     setSnackbarOpen(false);
   };
 
-  if (loading) return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <CircularProgress size={80} />
-    </Box>
-  );
-  
+  if (loading)
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress size={80} />
+      </Box>
+    );
+
   if (error) return <div className="p-4 text-red-500">{error}</div>;
 
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Alumnos</h1>
+
       <div className="flex justify-end">
-        <Button 
-          variant="contained" 
+        <Button
+          variant="contained"
           onClick={() => setOpen(true)}
           sx={{ mb: 2 }}
         >
           + Agregar alumno
         </Button>
-      </div>  
+      </div>
 
-      <DialogAddStudent 
-        open={open} 
-        onClose={() => setOpen(false)} 
+      {/* Campo de búsqueda */}
+      <div className="mb-4">
+        <TextField
+          label="Buscar alumno"
+          variant="outlined"
+          fullWidth
+          value={searchTerm}
+          onChange={handleSearch}
+        />
+      </div>
+
+      <DialogAddStudent
+        open={open}
+        onClose={() => setOpen(false)}
         onSuccess={handleAddSuccess}
       />
-      
+
       {/* Snackbar para mostrar confirmación */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >
-        <Alert 
-          onClose={handleCloseSnackbar} 
-          severity="success" 
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="success"
           variant="filled"
         >
-          Alumno agregado correctamente 
+          Alumno agregado correctamente
         </Alert>
       </Snackbar>
 
       <br />
       <div className="grid gap-4">
-        {allStudents.length > 0 ? (
+        {filteredStudents.length > 0 ? (
           <table className="w-full text-sm text-left rtl:text-right">
             <thead className="text-xs uppercase">
               <tr>
@@ -136,7 +180,7 @@ export function StudentsPage() {
               </tr>
             </thead>
             <tbody>
-              {allStudents.map((student) => (
+              {filteredStudents.map((student) => (
                 <tr key={`${student.id}-${student.club}`} className="bg-white">
                   <th
                     scope="row"
@@ -156,7 +200,7 @@ export function StudentsPage() {
             </tbody>
           </table>
         ) : (
-          <p className="text-gray-500">No hay miembros registrados</p>
+          <p className="text-gray-500">No se encontraron resultados</p>
         )}
       </div>
     </div>
