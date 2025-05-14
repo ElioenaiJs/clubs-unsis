@@ -1,16 +1,5 @@
 # Clubs UNSIS
 
-<style>
-h1, h2, h3 {
-    color: #2c3e50;
-}
-code {
-    background-color: #f4f4f4;
-    padding: 2px 4px;
-    border-radius: 4px;
-}
-</style>
-
 Este proyecto utiliza **React**, **Vite**, **Firebase Firestore** y **Material-UI** para crear una aplicación moderna y eficiente.
 
 ## Tecnologías utilizadas
