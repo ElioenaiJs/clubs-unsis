@@ -1,3 +1,10 @@
+import {
+  Box,
+  Card,
+  CardActionArea,
+  CardContent,
+  Typography,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 interface ClubData {
@@ -11,26 +18,50 @@ export function ClubsPage() {
   const clubsData: ClubData[] = [
     { id: "ajedrez", nombre: "Ajedrez" },
     { id: "danza", nombre: "Danza" },
-    { id: "taekwondo", nombre: "Taekwondo" }
+    { id: "taekwondo", nombre: "Taekwondo" },
   ];
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Clubs</h1>
-  
-      <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "1fr", // 1 columna en pantallas pequeñas
+            sm: "1fr 1fr", // 2 columnas en sm
+            md: "1fr 1fr 1fr", // 3 columnas en md
+          },
+          gap: 3,
+        }}
+      >
         {clubsData.map((club) => (
-          <div
+          <Card
             key={club.id}
-            className="bg-white border border-gray-200 rounded-2xl p-6 shadow-md hover:shadow-xl hover:scale-[1.02] transition-all duration-300 cursor-pointer text-center"
+            sx={{
+              borderRadius: 1,
+              transition: "transform 0.3s, box-shadow 0.3s",
+              "&:hover": {
+                boxShadow: 6,
+                transform: "scale(1.02)",
+                cursor: "pointer",
+              },
+            }}
             onClick={() => navigate(`/clubs-unsis/club/${club.id}`)}
           >
-            <h2 className="text-2xl font-semibold text-gray-800 mb-2">{club.nombre}</h2>
-            <p className="text-gray-500 text-sm">Explora el club de {club.nombre.toLowerCase()}.</p>
-          </div>
+            <CardActionArea>
+              <CardContent sx={{ textAlign: "center" }}>
+                <Typography variant="h6" color="text.primary" gutterBottom>
+                  {club.nombre}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Explora el club de {club.nombre.toLowerCase()}.
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
         ))}
-      </div>
+      </Box>
     </div>
   );
-  
 }
