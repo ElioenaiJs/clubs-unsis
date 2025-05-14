@@ -137,7 +137,11 @@ export function DialogAddStudent({
             noValidate
             autoComplete="off"
           >
-            <FormControl variant="standard" error={!!errors.matricula} fullWidth>
+            <FormControl
+              variant="standard"
+              error={!!errors.matricula}
+              fullWidth
+            >
               <InputLabel htmlFor="matricula-input">Matrícula</InputLabel>
               <Input
                 id="matricula-input"
