@@ -17,12 +17,10 @@ export function StudentsPage() {
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
 
-  // Lista estática de colecciones de clubes
   const clubCollections = [
     "club_ajedrez",
     "club_danza",
     "club_taekwondo",
-    // Agrega más colecciones si es necesario
   ];
 
   useEffect(() => {
@@ -30,7 +28,7 @@ export function StudentsPage() {
       try {
         const students: Student[] = [];
 
-        // Usamos Promise.all para hacer las consultas en paralelo
+        // Promise.all para hacer las consultas en paralelo
         const promises = clubCollections.map((clubCol) =>
           getDocs(collection(db, clubCol))
         );
