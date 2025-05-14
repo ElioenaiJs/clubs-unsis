@@ -18,30 +18,41 @@ export function MembersPage() {
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
 
+  const fetchStudents = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const collectionName = `club_${clubId}`;
+      const snapshot = await getDocs(collection(db, collectionName));
+
+      const studentsData = snapshot.docs.map((doc) => ({
+        name: doc.data().nombre_alumno,
+        id: doc.data().numero_alumno,
+        email: doc.data().correo,
+      }));
+
+      setStudents(studentsData);
+    } catch (err) {
+      console.error("Error fetching students:", err);
+      setError("Error al cargar los miembros del club");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        // Construye el nombre de la colección basado en el clubId
-        const collectionName = `club_${clubId}`;
-        const snapshot = await getDocs(collection(db, collectionName));
-
-        const studentsData = snapshot.docs.map((doc) => ({
-          name: doc.data().nombre_alumno,
-          id: doc.data().numero_alumno,
-          email: doc.data().correo,
-        }));
-
-        setStudents(studentsData);
-      } catch (err) {
-        console.error("Error fetching students:", err);
-        setError("Error al cargar los miembros del club");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchStudents();
   }, [clubId]);
+
+  const handleAddSuccess = () => {
+    // Recargar la lista de estudiantes después de agregar uno nuevo
+    fetchStudents();
+  };
+
+  const handleCloseDialog = () => {
+    setOpen(false);
+  };
 
   if (loading) return <div className="p-4">Cargando miembros...</div>;
   if (error) return <div className="p-4 text-red-500">{error}</div>;
@@ -59,7 +70,12 @@ export function MembersPage() {
         </Button>
       </div>
 
-      <DialogAddStudent open={open} onClose={() => setOpen(false)} />
+      <DialogAddStudent
+        open={open}
+        onClose={handleCloseDialog}
+        currentClub={`club_${clubId}`} // Club fijo basado en la ruta
+        onSuccess={handleAddSuccess}
+      />
       <div className="relative overflow-x-auto">
         <table className="w-full text-sm text-left rtl:text-right">
           <thead className="text-xs uppercase">
