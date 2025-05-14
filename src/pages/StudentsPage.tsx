@@ -3,6 +3,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import Button from '@mui/material/Button';
 import { DialogAddStudent } from "../components/user";
+import { Box, CircularProgress } from "@mui/material";
 
 interface Student {
   club: string;
@@ -59,7 +60,11 @@ export function StudentsPage() {
     fetchAllStudents();
   }, []);
 
-  if (loading) return <div className="p-4">Cargando todos los miembros...</div>;
+  if (loading) return (
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <CircularProgress size={80} />
+    </Box>
+  );
   if (error) return <div className="p-4 text-red-500">{error}</div>;
 
   return (

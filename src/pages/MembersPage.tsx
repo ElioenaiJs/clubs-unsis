@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../lib/firebase";
-import { Button } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import { DialogAddStudent } from "../components/user";
 
 interface Student {
@@ -54,8 +54,11 @@ export function MembersPage() {
     setOpen(false);
   };
 
-  if (loading) return <div className="p-4">Cargando miembros...</div>;
-  if (error) return <div className="p-4 text-red-500">{error}</div>;
+  if (loading) return (
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <CircularProgress size={80} />
+    </Box>
+  );  if (error) return <div className="p-4 text-red-500">{error}</div>;
 
   return (
     <div className="p-4">
