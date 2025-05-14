@@ -3,7 +3,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import Button from '@mui/material/Button';
 import { DialogAddStudent } from "../components/user";
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Snackbar, Alert } from "@mui/material";
 
 interface Student {
   club: string;
@@ -17,6 +17,8 @@ export function StudentsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const clubCollections = [
     "club_ajedrez",
@@ -27,9 +29,10 @@ export function StudentsPage() {
   useEffect(() => {
     const fetchAllStudents = async () => {
       try {
+        setLoading(true);
+        setError(null);
         const students: Student[] = [];
 
-        // Promise.all para hacer las consultas en paralelo
         const promises = clubCollections.map((clubCol) =>
           getDocs(collection(db, clubCol))
         );
@@ -58,23 +61,60 @@ export function StudentsPage() {
     };
 
     fetchAllStudents();
-  }, []);
+  }, [refreshTrigger]);
+
+  const handleAddSuccess = () => {
+    setRefreshTrigger(prev => prev + 1); // Forzar recarga de datos
+    setSnackbarOpen(true); // Mostrar notificación
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
 
   if (loading) return (
     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
       <CircularProgress size={80} />
     </Box>
   );
+  
   if (error) return <div className="p-4 text-red-500">{error}</div>;
 
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Alumnos</h1>
       <div className="flex justify-end">
-        <Button variant="contained" onClick={() => setOpen(true)}>+ Agregar alumno</Button>
+        <Button 
+          variant="contained" 
+          onClick={() => setOpen(true)}
+          sx={{ mb: 2 }}
+        >
+          + Agregar alumno
+        </Button>
       </div>  
 
-      <DialogAddStudent open={open} onClose={() => setOpen(false)}/>
+      <DialogAddStudent 
+        open={open} 
+        onClose={() => setOpen(false)} 
+        onSuccess={handleAddSuccess}
+      />
+      
+      {/* Snackbar para mostrar confirmación */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Alert 
+          onClose={handleCloseSnackbar} 
+          severity="success" 
+          variant="filled"
+        >
+          Alumno agregado correctamente 
+        </Alert>
+      </Snackbar>
+
       <br />
       <div className="grid gap-4">
         {allStudents.length > 0 ? (

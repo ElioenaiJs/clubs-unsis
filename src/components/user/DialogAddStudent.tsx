@@ -67,7 +67,9 @@ export function DialogAddStudent({
       await addDoc(collection(db, club), alumnoData);
 
       // Mostrar snackbar de éxito
-      setInsertSuccess(true);
+      if (!onSuccess) {
+        setInsertSuccess(true);
+      }
 
       // Ejecutar callback si existe
       onSuccess?.();
@@ -159,22 +161,22 @@ export function DialogAddStudent({
         </DialogActions>
       </Dialog>
 
-      {/* Snackbar para confirmación de inserción */}
-      <Snackbar
-        open={insertSuccess}
-        autoHideDuration={6000}
-        onClose={() => setInsertSuccess(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert
+      {!onSuccess && ( // Solo mostrar Snackbar si no hay callback onSuccess
+        <Snackbar
+          open={insertSuccess}
+          autoHideDuration={6000}
           onClose={() => setInsertSuccess(false)}
-          severity="success"
-          variant="filled"
-          sx={{ width: "100%" }}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
-          Alumno agregado correctamente
-        </Alert>
-      </Snackbar>
+          <Alert
+            onClose={() => setInsertSuccess(false)}
+            severity="success"
+            variant="filled"
+          >
+            Alumno agregado correctamente
+          </Alert>
+        </Snackbar>
+      )}
     </>
   );
 }

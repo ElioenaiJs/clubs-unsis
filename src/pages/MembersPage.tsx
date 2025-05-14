@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../lib/firebase";
-import { Box, Button, CircularProgress } from "@mui/material";
+import { Alert, Box, Button, CircularProgress, Snackbar } from "@mui/material";
 import { DialogAddStudent } from "../components/user";
 
 interface Student {
@@ -17,6 +17,7 @@ export function MembersPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const fetchStudents = async () => {
     try {
@@ -46,19 +47,28 @@ export function MembersPage() {
   }, [clubId]);
 
   const handleAddSuccess = () => {
-    // Recargar la lista de estudiantes después de agregar uno nuevo
     fetchStudents();
+    setSnackbarOpen(true); // Mostrar feedback visual
   };
 
   const handleCloseDialog = () => {
     setOpen(false);
   };
 
-  if (loading) return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <CircularProgress size={80} />
-    </Box>
-  );  if (error) return <div className="p-4 text-red-500">{error}</div>;
+  if (loading)
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress size={80} />
+      </Box>
+    );
+  if (error) return <div className="p-4 text-red-500">{error}</div>;
 
   return (
     <div className="p-4">
@@ -79,6 +89,20 @@ export function MembersPage() {
         currentClub={`club_${clubId}`} // Club fijo basado en la ruta
         onSuccess={handleAddSuccess}
       />
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}>
+        <Alert
+          onClose={() => setSnackbarOpen(false)}
+          severity="success"
+          variant="filled">
+          Alumno agregado correctamente
+        </Alert>
+      </Snackbar>
+      
       <div className="relative overflow-x-auto">
         <table className="w-full text-sm text-left rtl:text-right">
           <thead className="text-xs uppercase">
