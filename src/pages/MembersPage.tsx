@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../lib/firebase";
-import { Alert, Box, Button, CircularProgress, Snackbar } from "@mui/material";
+import { Alert, Box, Button, CircularProgress, Snackbar, TextField } from "@mui/material";
 import { DialogAddStudent } from "../components/user";
 
 interface Student {
@@ -14,10 +14,12 @@ interface Student {
 export function MembersPage() {
   const { clubId } = useParams<{ clubId: string }>();
   const [students, setStudents] = useState<Student[]>([]);
+  const [filteredStudents, setFilteredStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchStudents = async () => {
     try {
@@ -34,6 +36,7 @@ export function MembersPage() {
       }));
 
       setStudents(studentsData);
+      setFilteredStudents(studentsData); // Inicia los estudiantes filtrados con todos los estudiantes
     } catch (err) {
       console.error("Error fetching students:", err);
       setError("Error al cargar los miembros del club");
@@ -45,6 +48,19 @@ export function MembersPage() {
   useEffect(() => {
     fetchStudents();
   }, [clubId]);
+
+  useEffect(() => {
+    if (searchTerm) {
+      const filtered = students.filter((student) =>
+        student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        student.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        student.email.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredStudents(filtered);
+    } else {
+      setFilteredStudents(students);
+    }
+  }, [searchTerm, students]);
 
   const handleAddSuccess = () => {
     fetchStudents();
@@ -77,10 +93,22 @@ export function MembersPage() {
           ? clubId.charAt(0).toUpperCase() + clubId.slice(1).toLowerCase()
           : ""}
       </h1>
+
       <div className="flex justify-end">
         <Button variant="contained" onClick={() => setOpen(true)}>
           + Agregar alumno
         </Button>
+      </div>
+
+      {/* Campo de búsqueda */}
+      <div className="mb-4 mt-4">
+        <TextField
+          fullWidth
+          label="Buscar alumno"
+          variant="outlined"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
 
       <DialogAddStudent
@@ -102,7 +130,7 @@ export function MembersPage() {
           Alumno agregado correctamente
         </Alert>
       </Snackbar>
-      
+
       <div className="relative overflow-x-auto">
         <table className="w-full text-sm text-left rtl:text-right">
           <thead className="text-xs uppercase">
@@ -121,9 +149,9 @@ export function MembersPage() {
             </tr>
           </thead>
           <tbody>
-            {students.length > 0 ? (
-              students.map((student) => (
-                <tr className="bg-white">
+            {filteredStudents.length > 0 ? (
+              filteredStudents.map((student) => (
+                <tr className="bg-white" key={student.id}>
                   <th
                     scope="row"
                     className="px-6 py-4 font-medium whitespace-nowrap"
@@ -137,7 +165,11 @@ export function MembersPage() {
                 </tr>
               ))
             ) : (
-              <p>No hay miembros registrados en este club</p>
+              <tr>
+                <td colSpan={5} className="px-6 py-4 text-center">
+                  No hay registrados en este club
+                </td>
+              </tr>
             )}
           </tbody>
         </table>
