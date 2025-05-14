@@ -49,37 +49,37 @@ export function MembersPage() {
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">
-        {clubId ? clubId.charAt(0).toUpperCase() + clubId.slice(1).toLowerCase() : ''}
+        {clubId
+          ? clubId.charAt(0).toUpperCase() + clubId.slice(1).toLowerCase()
+          : ""}
       </h1>
       <div className="flex justify-end">
-        <Button variant="contained" onClick={() => setOpen(true)}>+ Agregar alumno</Button>
+        <Button variant="contained" onClick={() => setOpen(true)}>
+          + Agregar alumno
+        </Button>
       </div>
 
-      <DialogAddStudent open={open} onClose={() => setOpen(false)}/>
+      <DialogAddStudent open={open} onClose={() => setOpen(false)} />
       <div className="relative overflow-x-auto">
-        {students.length > 0 ? (
-          students.map((student) => (
-            <table className="w-full text-sm text-left rtl:text-right">
-              <thead className="text-xs uppercase">
-                <tr>
-                  <th scope="col" className="px-6 py-3">
-                    Nombre
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Matricula
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Correo
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
+        <table className="w-full text-sm text-left rtl:text-right">
+          <thead className="text-xs uppercase">
+            <tr>
+              <th scope="col" className="px-6 py-3">
+                Nombre
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Matricula
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Correo
+              </th>
+              <th scope="col" className="px-6 py-3"></th>
+              <th scope="col" className="px-6 py-3"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {students.length > 0 ? (
+              students.map((student) => (
                 <tr className="bg-white">
                   <th
                     scope="row"
@@ -92,12 +92,12 @@ export function MembersPage() {
                   <td className="px-6 py-4"></td>
                   <td className="px-6 py-4"></td>
                 </tr>
-              </tbody>
-            </table>
-          ))
-        ) : (
-          <p>No hay miembros registrados en este club</p>
-        )}
+              ))
+            ) : (
+              <p>No hay miembros registrados en este club</p>
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );
