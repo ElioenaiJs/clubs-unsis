@@ -1,23 +1,6 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Box,
-  InputLabel,
-  Select,
-  MenuItem,
-  FormControl,
-  FormHelperText,
-  Snackbar,
-  Alert,
-  CircularProgress,
-  Input,
-} from "@mui/material";
 import React, { useState } from "react";
-import { db } from "../../lib/firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Box, InputLabel, Select, MenuItem, FormControl, FormHelperText, Snackbar, Alert, CircularProgress, Input } from "@mui/material";
+import { addStudent } from "../../services/addStudentService";
 
 interface DialogAddStudentProps {
   open: boolean;
@@ -88,21 +71,12 @@ export function DialogAddStudent({
 
     try {
       setLoading(true);
-
-      const alumnoData = {
-        numero_alumno: matricula,
-        nombre_alumno: nombre,
-        correo: correo,
-      };
-
-      await addDoc(collection(db, club), alumnoData);
-
+      await addStudent(club, matricula, nombre, correo); 
       if (!onSuccess) {
         setInsertSuccess(true);
       } else {
         onSuccess();
       }
-
       handleClose();
     } catch (err) {
       console.error("Error al agregar alumno:", err);

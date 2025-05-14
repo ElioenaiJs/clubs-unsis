@@ -1,10 +1,4 @@
-import {
-  Box,
-  Card,
-  CardActionArea,
-  CardContent,
-  Typography,
-} from "@mui/material";
+import { Box, Card, CardActionArea, CardContent, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 interface ClubData {
@@ -28,9 +22,9 @@ export function ClubsPage() {
         sx={{
           display: "grid",
           gridTemplateColumns: {
-            xs: "1fr", // 1 columna en pantallas pequeñas
-            sm: "1fr 1fr", // 2 columnas en sm
-            md: "1fr 1fr 1fr", // 3 columnas en md
+            xs: "1fr", 
+            sm: "1fr 1fr", 
+            md: "1fr 1fr 1fr", 
           },
           gap: 3,
         }}

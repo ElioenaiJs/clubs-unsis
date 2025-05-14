@@ -1,30 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../lib/firebase";
-import {
-  Alert,
-  Box,
-  Button,
-  CircularProgress,
-  Paper,
-  Snackbar,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Alert, Box, Button, CircularProgress, Paper, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import { DialogAddStudent } from "../components/user";
-
-interface Student {
-  name: string;
-  id: string;
-  email: string;
-}
+import { fetchStudentsFromClub, Student } from "../services/studentsFormClub";
 
 export function MembersPage() {
   const { clubId } = useParams<{ clubId: string }>();
@@ -37,21 +15,14 @@ export function MembersPage() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const fetchStudents = async () => {
+    if (!clubId) return;
+
     try {
       setLoading(true);
       setError(null);
-
-      const collectionName = `club_${clubId}`;
-      const snapshot = await getDocs(collection(db, collectionName));
-
-      const studentsData = snapshot.docs.map((doc) => ({
-        name: doc.data().nombre_alumno,
-        id: doc.data().numero_alumno,
-        email: doc.data().correo,
-      }));
-
+      const studentsData = await fetchStudentsFromClub(clubId);
       setStudents(studentsData);
-      setFilteredStudents(studentsData); // Inicia los estudiantes filtrados con todos los estudiantes
+      setFilteredStudents(studentsData);
     } catch (err) {
       console.error("Error fetching students:", err);
       setError("Error al cargar los miembros del club");
@@ -80,12 +51,10 @@ export function MembersPage() {
 
   const handleAddSuccess = () => {
     fetchStudents();
-    setSnackbarOpen(true); // Mostrar feedback visual
+    setSnackbarOpen(true);
   };
 
-  const handleCloseDialog = () => {
-    setOpen(false);
-  };
+  const handleCloseDialog = () => setOpen(false);
 
   if (loading)
     return (

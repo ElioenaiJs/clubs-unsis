@@ -1,24 +1,8 @@
-import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../lib/firebase";
-import Button from "@mui/material/Button";
-import { DialogAddStudent } from "../components/user";
-import {
-  Box,
-  CircularProgress,
-  Snackbar,
-  Alert,
-  TextField,
-  TableContainer,
-  Typography,
-  Table,
-  Paper,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Chip,
-} from "@mui/material";
+import { useEffect, useState } from "react"; 
+import Button from "@mui/material/Button"; 
+import { DialogAddStudent } from "../components/user"; 
+import { Box, CircularProgress, Snackbar, Alert, TextField, TableContainer, Typography, Table, Paper, TableHead, TableRow, TableCell, TableBody, Chip } from "@mui/material";
+import { getAllStudents } from "../services/studentService";
 
 interface Student {
   club: string;
@@ -37,44 +21,23 @@ export function StudentsPage() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const clubCollections = ["club_ajedrez", "club_danza", "club_taekwondo"];
-
   useEffect(() => {
-    const fetchAllStudents = async () => {
+    const fetchStudents = async () => {
       try {
         setLoading(true);
         setError(null);
-        const students: Student[] = [];
-
-        const promises = clubCollections.map((clubCol) =>
-          getDocs(collection(db, clubCol))
-        );
-
-        const snapshots = await Promise.all(promises);
-
-        snapshots.forEach((snapshot, index) => {
-          const clubName = clubCollections[index].replace("club_", "");
-          snapshot.forEach((doc) => {
-            students.push({
-              club: clubName,
-              name: doc.data().nombre_alumno,
-              id: doc.data().numero_alumno,
-              email: doc.data().correo,
-            });
-          });
-        });
-
+        const students = await getAllStudents();
         setAllStudents(students);
-        setFilteredStudents(students); // Inicialmente mostramos todos los estudiantes
+        setFilteredStudents(students);
       } catch (err) {
-        console.error("Error fetching all students:", err);
+        console.error("Error fetching students:", err);
         setError("Error al cargar todos los miembros");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchAllStudents();
+    fetchStudents();
   }, [refreshTrigger]);
 
   // Filtrar los estudiantes según el término de búsqueda
