@@ -15,20 +15,22 @@ export function ClubsPage() {
   ];
 
   return (
-    <div className="p-4">
+    <div className="p-6 max-w-7xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Clubs</h1>
-
-      <div className="grid gap-6 md:grid-cols-3">
+  
+      <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
         {clubsData.map((club) => (
-          <div 
+          <div
             key={club.id}
-            className="border border-gray-200 rounded-lg p-4 shadow hover:shadow-md transition-shadow cursor-pointer"
+            className="bg-white border border-gray-200 rounded-2xl p-6 shadow-md hover:shadow-xl hover:scale-[1.02] transition-all duration-300 cursor-pointer text-center"
             onClick={() => navigate(`/clubs-unsis/club/${club.id}`)}
           >
-            <h2 className="text-xl font-semibold">{club.nombre}</h2>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-2">{club.nombre}</h2>
+            <p className="text-gray-500 text-sm">Explora el club de {club.nombre.toLowerCase()}.</p>
           </div>
         ))}
       </div>
     </div>
   );
+  
 }
